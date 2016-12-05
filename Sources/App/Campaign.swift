@@ -14,6 +14,7 @@ final class Campaign: Model {
     var id: Node?
     var name: String
     var type: Int
+    //var exists: Bool=false
     
     init(name: String, type: Int) {
         self.id = UUID().uuidString.makeNode()
