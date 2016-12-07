@@ -12,7 +12,10 @@ drop.get() { request in
     ])
 }
 drop.get("campaign") { request in
-    return try Campaign.all().makeNode().converted(to: JSON.self)
+    guard let campaignId = request.data["campaignId"]?.string else {
+        return try Campaign.all().makeNode().converted(to: JSON.self)
+    }
+    return try Campaign.query().filter("campaignId", .equals, campaignId).first()!.converted(to: JSON.self)
 }
 
 drop.post("campaign") { request in
