@@ -11,23 +11,17 @@ drop.get() { request in
     	"message": drop.localization[request.lang, "welcome", "title"]
     ])
 }
-
-drop.resource("posts", PostController())
-
-drop.post("user") { request in
-    guard let name = request.data["name"]?.string else {
-        return Abort.badRequest as! ResponseRepresentable
-    }
-    return name
+drop.get("campaign") { request in
+    return try Campaign.all().makeNode().converted(to: JSON.self)
 }
 
 drop.post("campaign") { request in
-    guard let name = request.data["name"]?.string,
-        let type = request.data["type"]?.int else {
+    guard let campaignName = request.data["campaignName"]?.string,
+        let campaignId = request.data["campaignId"]?.int else {
         return Abort.custom(status: .badRequest, message: "name or type badly specified") as! ResponseRepresentable
     }
     
-    var campaign = Campaign(name: name, type: type)
+    var campaign = Campaign(campaignName: campaignName, campaignId: campaignId)
     try campaign.save()
     return campaign
 }

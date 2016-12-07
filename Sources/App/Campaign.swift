@@ -12,47 +12,37 @@ import Foundation
 
 final class Campaign: Model {
     var id: Node?
-    var name: String
-    var type: Int
-    //var exists: Bool=false
+    var campaignName: String
+    var campaignId: Int
+    var exists: Bool = false
     
-    init(name: String, type: Int) {
-        self.id = UUID().uuidString.makeNode()
-        self.name = name
-        self.type = type
+    init(campaignName: String, campaignId: Int) {
+        self.campaignName = campaignName
+        self.campaignId = campaignId
     }
     
     init(node: Node, in context: Context) throws {
         id = try node.extract("id")
-        name = try node.extract("name")
-        type = try node.extract("type")
+        campaignName = try node.extract("campaignName")
+        campaignId = try node.extract("campaignId")
     }
     
     func makeNode(context: Context) throws -> Node {
         return try Node(node: [
             "id": id,
-            "name": name,
-            "type": type
+            "campaignName": campaignName,
+            "campaignId": campaignId
             ])
     }
-}
-
-extension Campaign {
-    /**
-     This will automatically fetch from database, using example here to load
-     automatically for example. Remove on real models.
-     */
-    public convenience init?(from string: String, type: Int) throws {
-        self.init(name: "hello", type: 0)
-    }
-}
-
-extension Campaign: Preparation {
     static func prepare(_ database: Database) throws {
-        //
+        try database.create("campaigns") { campaign in
+            campaign.id()
+            campaign.string("campaignName")
+            campaign.int("campaignId")
+        }
     }
     
     static func revert(_ database: Database) throws {
-        //
+        try database.delete("campaigns")
     }
 }
