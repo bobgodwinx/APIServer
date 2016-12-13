@@ -5,8 +5,6 @@
 //  Created by Bob Godwin Obi on 12/13/16.
 //
 //
-
-
 import Vapor
 import Fluent
 import Foundation

@@ -46,10 +46,3 @@ final class Campaign: Model {
         try database.delete("campaigns")
     }
 }
-
-extension Campaign {
-    func adgroups() throws -> Parent<Adgroup> {
-        return try parent(self.id!)
-    }
-}
-
